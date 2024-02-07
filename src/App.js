@@ -1,61 +1,30 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-function useTodos() {
-  const [todos, setTodos] = useState([])
-  const [loading, setLoading] = useState(true)
+function useCoordinates(){
+  const [coordinates, setCoordinates] = useState({lat: null, lon: null})
   useEffect(() => {
-    let interval = setInterval(async () => {
-      setLoading(true)
-      console.log("HITTING THE BACKEND NOW!")
-      let res = await axios.get("https://sum-server.100xdevs.com/todos")
-      setLoading(false)
-      setTodos(res.data.todos);
-    }, 2000)
-    return () => {
-      clearInterval(interval)
-    }
+    window.addEventListener('mousemove', (e)=>{
+      setCoordinates({
+        X:e.clientX,
+        Y:e.clientY
+      })
+    });
+    // return ()=>{
+    //   window.removeEventListener('mousemove')
+    // }
   }, [])
-  return [todos, loading]
+  return [coordinates]
 }
 
-function Loading() {
-  return (
-    <>Loading...</>
-  )
-}
 function App() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
-  useEffect(() => {
-    window.addEventListener('online', () => setIsOnline(true))
-    window.addEventListener('offline', () => setIsOnline(false))
-    return () => {
-      window.removeEventListener('online', () => setIsOnline(true))
-      window.removeEventListener('offline', () => setIsOnline(false))
-    }
-  }, [])
+  const [coorindates] = useCoordinates()
   return (
     <>
-    {isOnline ? <TodoComponent /> : (alert("You are offline!"))}
+      X:{coorindates.X}<br/>
+      Y:{coorindates.Y}
     </>
   )
-}
-
-function TodoComponent() {
-  const [todos, loading] = useTodos()
-  return (
-    <div className='container'>
-      {loading ? <Loading /> : todos.map(todo => <Track todo={todo} />)}
-    </div>
-  )
-}
-
-function Track({ todo }) {
-  return <div>
-    {todo.title}
-    <br />
-    {todo.description}
-  </div>
 }
 
 export default App
