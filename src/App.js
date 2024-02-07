@@ -1,30 +1,29 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-function useCoordinates(){
-  const [coordinates, setCoordinates] = useState({lat: null, lon: null})
-  useEffect(() => {
-    window.addEventListener('mousemove', (e)=>{
-      setCoordinates({
-        X:e.clientX,
-        Y:e.clientY
-      })
-    });
-    // return ()=>{
-    //   window.removeEventListener('mousemove')
-    // }
+function useInterval(callBack, interval){
+  const [counter, setCounter] = useState(0)
+  useEffect(()=>{
+    let ref = setInterval(callBack, interval)
+    return ()=>{
+      clearInterval(ref)
+    }
   }, [])
-  return [coordinates]
 }
 
 function App() {
-  const [coorindates] = useCoordinates()
+  const [count, setCount] = useState(0);
+
+  useInterval(() => {
+    setCount(c => c + 1);
+  }, 1000)
+
   return (
     <>
-      X:{coorindates.X}<br/>
-      Y:{coorindates.Y}
+      Timer is at {count}
     </>
   )
 }
+
 
 export default App
