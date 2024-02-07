@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 export function MyComponent2() {
   useEffect(() => {
-    console.log('Component is mounted')
+    console.log('Component2 is mounted')
 
     return () => {
       //this function runs when dependency changes / component is unmounted
-      console.log('Component is unmounted')
+      console.log('Component2 is unmounted')
     }
   }, [])
   return (
