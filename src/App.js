@@ -1,31 +1,32 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import { MyComponent1 } from './components/MyComponent1'
-import { MyComponent2 } from './components/MyComponent2(UseEffect LifeCycle)'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import './App.css'
 
+function useTodos() {
+  const [todos, setTodos] = useState([])
+
+  useEffect(async () => {
+    let res = await axios.get("https://sum-server.100xdevs.com/todos")
+    setTodos(res.data.todos);
+  }, [])
+  return todos
+}
 
 function App() {
-  const [showComponent, setShowComponent] = useState(true)
-  setTimeout(() => {
-    setShowComponent(!showComponent)
-  }, 2000)
-
-  useEffect(() => {
-    console.log('App is mounted')
-    return () => {
-      //this function runs when dependency changes / component is unmounted
-      console.log('App is unmounted')
-    }
-  }, [])
-
-
+  const todos = useTodos()
   return (
     <>
-      <MyComponent1 showComponent={showComponent} />  {/* this will cause a re render in MC1 */}
-      {showComponent && <MyComponent2 />} {/* this will cause a un-mount mount in MC2 */}
+      {todos.map(todo => <Track todo={todo} />)}
     </>
-
   )
 }
 
-export default App;
+function Track({ todo }) {
+  return <div>
+    {todo.title}
+    <br />
+    {todo.description}
+  </div>
+}
+
+export default App
