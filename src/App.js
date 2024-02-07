@@ -4,20 +4,32 @@ import './App.css'
 
 function useTodos() {
   const [todos, setTodos] = useState([])
-
+  const [loading, setLoading] = useState(true)
   useEffect(async () => {
-    let res = await axios.get("https://sum-server.100xdevs.com/todos")
-    setTodos(res.data.todos);
+    let interval = setInterval(async()=>{
+      setLoading(true)
+      let res = await axios.get("https://sum-server.100xdevs.com/todos")
+      setLoading(false)
+      setTodos(res.data.todos);
+    }, 2000)
+    return ()=>{
+      clearInterval(interval)
+    }
   }, [])
-  return todos
+  return [todos, loading]
 }
 
-function App() {
-  const todos = useTodos()
+function Loading(){
   return (
-    <>
-      {todos.map(todo => <Track todo={todo} />)}
-    </>
+    <>Loading...</>
+  )
+}
+function App() {
+  const [todos, loading] = useTodos()
+  return (
+    <div className='container'>
+      {loading ? <Loading /> : todos.map(todo => <Track todo={todo} />)}
+    </div>
   )
 }
 
