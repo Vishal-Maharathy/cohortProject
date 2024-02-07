@@ -5,26 +5,43 @@ function useTodos() {
   const [todos, setTodos] = useState([])
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    let interval = setInterval(async()=>{
+    let interval = setInterval(async () => {
       setLoading(true)
       console.log("HITTING THE BACKEND NOW!")
       let res = await axios.get("https://sum-server.100xdevs.com/todos")
       setLoading(false)
       setTodos(res.data.todos);
     }, 2000)
-    return ()=>{
+    return () => {
       clearInterval(interval)
     }
   }, [])
   return [todos, loading]
 }
 
-function Loading(){
+function Loading() {
   return (
     <>Loading...</>
   )
 }
 function App() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
+  useEffect(() => {
+    window.addEventListener('online', () => setIsOnline(true))
+    window.addEventListener('offline', () => setIsOnline(false))
+    return () => {
+      window.removeEventListener('online', () => setIsOnline(true))
+      window.removeEventListener('offline', () => setIsOnline(false))
+    }
+  }, [])
+  return (
+    <>
+    {isOnline ? <TodoComponent /> : (alert("You are offline!"))}
+    </>
+  )
+}
+
+function TodoComponent() {
   const [todos, loading] = useTodos()
   return (
     <div className='container'>
