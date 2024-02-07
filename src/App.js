@@ -1,29 +1,48 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+  import { useEffect, useState } from 'react'
+  import axios from 'axios'
 
-function useInterval(callBack, interval){
-  const [counter, setCounter] = useState(0)
-  useEffect(()=>{
-    let ref = setInterval(callBack, interval)
-    return ()=>{
-      clearInterval(ref)
-    }
-  }, [])
-}
+  function useDebounce(inputValue, interval) {
+    const [value, setValue] = useState("")
 
-function App() {
-  const [count, setCount] = useState(0);
+    useEffect(() => {
+      
+      let referenceTimer = setTimeout(() => {
+        setValue(inputValue)
+      }, interval)
 
-  useInterval(() => {
-    setCount(c => c + 1);
-  }, 1000)
+      return ()=>{clearTimeout(referenceTimer)}
+    }, [inputValue])
 
-  return (
-    <>
-      Timer is at {count}
-    </>
-  )
-}
+    return value
+  }
+
+  const SearchBar = () => {
+    const [inputValue, setInputValue] = useState('');
+    const debouncedValue = useDebounce(inputValue, 500); // 500 milliseconds debounce delay
+
+    // Use the debouncedValue in your component logic, e.g., trigger a search API call via a useEffect
+
+    return (
+      <>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Search..."
+        /><br/>
+        <h1>{debouncedValue}</h1>
+      </>
+    );
+  };
+
+  function App() {
+
+    return (
+      <>
+        <SearchBar />
+      </>
+    )
+  }
 
 
-export default App
+  export default App
