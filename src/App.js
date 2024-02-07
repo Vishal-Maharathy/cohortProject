@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import './App.css'
 
 function useTodos() {
   const [todos, setTodos] = useState([])
   const [loading, setLoading] = useState(true)
-  useEffect(async () => {
+  useEffect(() => {
     let interval = setInterval(async()=>{
       setLoading(true)
+      console.log("HITTING THE BACKEND NOW!")
       let res = await axios.get("https://sum-server.100xdevs.com/todos")
       setLoading(false)
       setTodos(res.data.todos);
