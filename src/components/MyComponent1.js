@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 export function MyComponent1({ showComponent}) {
     const [count, setCount] = useState(0);
-
     useEffect(() => {
       console.log('Component1 is mounted BRUH')
       return () => {
@@ -17,7 +16,6 @@ export function MyComponent1({ showComponent}) {
     const decrementCount = () => {
       setCount(count - 1);
     };
-    
     return (
       <div>
         <p>{count}</p>

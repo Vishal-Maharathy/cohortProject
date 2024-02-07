@@ -21,8 +21,8 @@ function App() {
 
   return (
     <>
-      <MyComponent1 showComponent={showComponent} />
-      {showComponent && <MyComponent2 />}
+      <MyComponent1 showComponent={showComponent} />  {/* this will cause a re render in MC1 */}
+      {showComponent && <MyComponent2 />} {/* this will cause a un-mount mount in MC2 */}
     </>
 
   )
